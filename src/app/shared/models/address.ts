@@ -28,7 +28,11 @@ export class Address {
   }
 
   public getAddress(): string {
-    return `${this.street}, ${this.area}, ${this.city}, ${this.state}, ${this.postcode}`;
+    return `${this.street}${this.street !== '' ? ',' : ''} 
+    ${this.area}${this.area !== '' ? ',' : ''} 
+    ${this.city}${this.city !== '' ? ',' : ''} 
+    ${this.postcode}${this.postcode !== 0 ? ',' : ''} 
+    ${this.state}${this.state !== '' ? ',' : ''}`;
   }
 
   public getFullAddress(): string {

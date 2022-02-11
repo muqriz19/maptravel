@@ -40,7 +40,11 @@ export class CalculateComponent implements OnInit {
 
   public dismissModal() {
     this.templateResult = '';
-    this.calculateForm.reset();
+    const initValue = {
+      calculateBy: 'distance',
+    };
+
+    this.calculateForm.reset(initValue);
     this.ui.dismissModal();
   }
 

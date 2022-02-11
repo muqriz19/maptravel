@@ -9,7 +9,7 @@
       </div>
 
       <div class="modal-body">
-        <form [formGroup]="addLocationForm" (ngSubmit)="addAnotherLocation()">
+        <form [formGroup]="addLocationForm">
           <div class="mb-3">
             <label for="anotherAddress" class="form-label custom-form-labels"
               >Address</label
@@ -27,6 +27,7 @@
               type="submit"
               class="btn btn-primary"
               [disabled]="addLocationForm.invalid"
+              (click)="addAnotherLocation()"
             >
               Add Address
             </button>

@@ -7,7 +7,7 @@
 
       <div class="modal-body">
         <h6 class="text-center">Key in your name and address below</h6>
-        <form [formGroup]="startForm" (ngSubmit)="proceedApp()">
+        <form [formGroup]="startForm">
           <div class="mb-3">
             <label for="name" class="form-label custom-form-labels">Name</label>
             <input
@@ -35,6 +35,7 @@
               type="submit"
               class="btn btn-primary"
               [disabled]="startForm.invalid"
+              (click)="proceedApp()"
             >
               Proceed
             </button>

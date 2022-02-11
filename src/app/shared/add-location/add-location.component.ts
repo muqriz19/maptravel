@@ -177,16 +177,20 @@ export class AddLocationComponent implements OnInit {
     });
   }
 
-  private initMapAutoComplete(bounds: any) {
-    if (this.autoComplete) {
-      this.autoComplete = null;
+  private async initMapAutoComplete(bounds: any) {
+    if (this.firstTime) {
+      this.autoComplete = await this.map.getGoogleAutocomplete(
+        'anotherAddress',
+        bounds,
+        true
+      );
+    } else {
+      this.autoComplete.unbind('bounds');
+      this.autoComplete.setBounds(bounds);
+
+      console.log(this.gMap.markers);
+      this.currentMarker.setMap(null);
     }
-    
-    this.autoComplete = this.map.getGoogleAutocomplete(
-      'anotherAddress',
-      bounds,
-      true
-    );
   }
 
   // needds to happen once
@@ -276,6 +280,7 @@ export class AddLocationComponent implements OnInit {
       },
     };
 
+    this.currentMarker.setMap(null);
     this.addLocationForm.reset(resetAddressInitVal);
     this.ui.dismissModal();
   }

@@ -16,6 +16,13 @@ import { UiService } from '../ui/ui.service';
 })
 export class AddLocationComponent implements OnInit {
   public addLocationForm!: FormGroup;
+  private firstTime = true;
+  private google: any;
+  private gMap!: any;
+  private autoComplete: any;
+
+  private currentMarker: any;
+  private rangeCirlce: any;
 
   constructor(
     private fb: FormBuilder,
@@ -24,11 +31,24 @@ export class AddLocationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.init();
+  }
+
+  private init() {
     this.initForm();
+    this.initMapAutoComplete();
+
+    this.ui.getData().subscribe((data) => {
+      if (data && this.firstTime) {
+        this.initMap(data.address);
+        this.firstTime = false;
+      }
+    });
   }
 
   private initForm(): void {
     this.addLocationForm = this.fb.group({
+      range: new FormControl(10, []),
       anotherAddress: new FormControl('', [Validators.required]),
       address: this.fb.group({
         fullAddress: new FormControl('', [Validators.required]),
@@ -41,16 +61,95 @@ export class AddLocationComponent implements OnInit {
       }),
     });
 
-    this.initMapAutoComplete();
+    // listen to range circle values update
+    this.addLocationForm.get('range')?.valueChanges.subscribe((value) => {
+      console.log(value);
+      this.updateCircleRange(value * 1000);
+    });
+  }
+
+  private initMap(startCoords: Address): void {
+    // starting address coords
+    const startAddressCoord = {
+      lat: startCoords.getCoordinates().lat,
+      lng: startCoords.getCoordinates().long,
+    };
+    this.google = this.map.getGoogle();
+
+    this.gMap = new this.google.maps.Map(
+      document.getElementById('map') as HTMLElement,
+      {
+        zoom: 15,
+        center: startAddressCoord,
+      }
+    );
+
+    // The starting marker - should not be removed
+    const marker = new this.google.maps.Marker({
+      position: startAddressCoord,
+      map: this.gMap,
+      draggable: false,
+    });
+
+    // 1000 m === 1km
+    // for start range 10km === 10000m
+    // need to check back?
+    this.rangeCirlce = new this.google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 1,
+      strokeWeight: 1,
+      fillOpacity: 0.01,
+      clickable: true,
+      map: this.gMap,
+      center: startAddressCoord,
+      radius: 10000,
+    });
+
+    // current select pin marker with custom icon
+    this.currentMarker = new this.google.maps.Marker({
+      draggable: false,
+      icon: '/assets/images/pin-icon.png',
+    });
+
+    // click event for inside range cicle only
+    this.rangeCirlce.addListener('click', (ev: any) => {
+      console.log(ev);
+
+      const lat = ev.latLng.lat();
+      const long = ev.latLng.lng();
+
+      // update marker on map
+      this.updateNewAddressMarker(lat, long);
+
+      // show on address field
+      this.map.reverseGeoCode(lat, long).then((address) => {
+        console.log(address);
+
+        this.addLocationForm.get('anotherAddress')?.setValue(address as string);
+
+        const inputAddress = document.querySelector(
+          '#anotherAddress'
+        ) as HTMLInputElement;
+
+        inputAddress.focus();
+      });
+    });
   }
 
   private initMapAutoComplete() {
-    const autocomplete = this.map.getGoogleAutocomplete('anotherAddress');
+    this.autoComplete = this.map.getGoogleAutocomplete('anotherAddress');
 
     // get address of clicking on the single address
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
+    this.autoComplete.addListener('place_changed', () => {
+      const place = this.autoComplete.getPlace();
       const addressFormGroup = this.addLocationForm.get('address') as FormGroup;
+      console.log(place);
+
+      // also update pin to the map based on lat long
+      const lat = place.geometry.location.lat();
+      const long = place.geometry.location.lng();
+
+      this.updateNewAddressMarker(lat, long);
 
       if (place.address_components) {
         this.ui.transformAddress(place, addressFormGroup).then(() => {
@@ -58,6 +157,24 @@ export class AddLocationComponent implements OnInit {
         });
       }
     });
+  }
+
+  // only change the one that created via initMap function
+  public updateNewAddressMarker(lat: number, long: number) {
+    const location = {
+      lat,
+      lng: long,
+    };
+
+    // set position on map
+    this.currentMarker.setPosition(location);
+    // show on map
+    this.currentMarker.setMap(this.gMap);
+  }
+
+  // update range circle
+  public updateCircleRange(rangeValue: number) {
+    this.rangeCirlce.setRadius(rangeValue);
   }
 
   public addAnotherLocation(): void {
@@ -92,7 +209,22 @@ export class AddLocationComponent implements OnInit {
     this.ui.passData(data).then(() => {});
   }
 
-  public dismissModal() {
+  public dismissModal(): void {
+    const resetAddressInitVal = {
+      range: 10,
+      anotherAddress: '',
+      address: {
+        fullAddress: '',
+        street: '',
+        area: '',
+        state: '',
+        city: '',
+        postCode: 0,
+        coords: {},
+      },
+    };
+
+    this.addLocationForm.reset(resetAddressInitVal);
     this.ui.dismissModal();
   }
 }

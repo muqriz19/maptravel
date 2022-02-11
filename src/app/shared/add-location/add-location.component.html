@@ -5,11 +5,38 @@
         <h5 class="modal-title center-all custom-titles">
           Add Another Address
         </h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="dismissModal()"></button>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="dismissModal()"
+        ></button>
       </div>
 
       <div class="modal-body">
         <form [formGroup]="addLocationForm">
+          <div class="mb-3">
+            <!-- MAP INPUT AREA -->
+            <div id="map"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="mapRange" class="form-label">Range 10KM - 40 KM</label>
+            <label for="mapRange" class="form-label d-block"
+              >Current Range:
+              {{ addLocationForm?.get("range")?.value }} KM</label
+            >
+
+            <input
+              type="range"
+              class="form-range"
+              min="10"
+              max="40"
+              formControlName="range"
+              id="mapRange"
+            />
+          </div>
+
           <div class="mb-3">
             <label for="anotherAddress" class="form-label custom-form-labels"
               >Address</label

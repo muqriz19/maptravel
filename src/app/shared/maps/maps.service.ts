@@ -40,8 +40,9 @@ export class MapsService {
 
   public getGoogleAutocomplete(
     inputHTMLID: string,
-    value?: string,
-    anyBounds?: any
+    bounds: any,
+    declareBounds: boolean,
+    value?: string
   ) {
     const startInputAddress = document.getElementById(
       inputHTMLID
@@ -51,6 +52,7 @@ export class MapsService {
 
     console.log(startInputAddress);
 
+    // 10km === 0.1
     // const bounds = {
     //   north: this.currentLat + 0.1,
     //   south: this.currentLat - 0.1,
@@ -59,10 +61,10 @@ export class MapsService {
     // };
 
     const options = {
-      // bounds,
+      bounds,
       componentRestrictions: { country: 'my' },
       fields: ['address_components', 'geometry', 'name'],
-      strictBounds: false,
+      strictBounds: declareBounds,
       // types: ['address'],
     };
 

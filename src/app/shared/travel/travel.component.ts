@@ -69,7 +69,6 @@ export class TravelComponent implements OnInit, AfterViewInit {
     for (let fa = 0; fa < this.allTravelPoints.length; fa++) {
       if (this.allTravelPoints[fa].getFullAddress() === fullAddress) {
         this.allTravelPoints.splice(fa, 1);
-        break;
       }
     }
   }

@@ -24,6 +24,9 @@ export class AddLocationComponent implements OnInit {
   private currentMarker: any;
   private rangeCirlce: any;
 
+  private lat = 0;
+  private long = 0;
+
   constructor(
     private fb: FormBuilder,
     private map: MapsService,
@@ -36,11 +39,31 @@ export class AddLocationComponent implements OnInit {
 
   private init() {
     this.initForm();
-    this.initMapAutoComplete();
 
+    // receive data from first time address
     this.ui.getData().subscribe((data) => {
       if (data && this.firstTime) {
+        console.log(data);
+        // set for bound later
+        this.lat = (data.address as Address).getCoordinates().lat;
+        this.long = (data.address as Address).getCoordinates().long;
+
+        // inital bounds
+        const bounds = {
+          north: this.lat + 0.1,
+          south: this.lat - 0.1,
+          east: this.long + 0.1,
+          west: this.long - 0.1,
+        };
+
         this.initMap(data.address);
+        this.initMapAutoComplete(bounds);
+
+        // delay place change event
+        setTimeout(() => {
+          this.initMapAutoCompleteEvent();
+        }, 2000);
+
         this.firstTime = false;
       }
     });
@@ -64,7 +87,25 @@ export class AddLocationComponent implements OnInit {
     // listen to range circle values update
     this.addLocationForm.get('range')?.valueChanges.subscribe((value) => {
       console.log(value);
-      this.updateCircleRange(value * 1000);
+      const circleRange = value * 1000;
+      console.log(circleRange);
+      // update circle radius
+      this.updateCircleRange(circleRange);
+
+      const boundsKM = (value * 1000) / 1000 / 100;
+      console.log(boundsKM);
+
+      const bounds = {
+        north: this.lat + boundsKM,
+        south: this.lat - boundsKM,
+        east: this.long + boundsKM,
+        west: this.long - boundsKM,
+      };
+
+      console.log(bounds);
+
+      // update bounds aswell
+      this.initMapAutoComplete(bounds);
     });
   }
 
@@ -98,7 +139,7 @@ export class AddLocationComponent implements OnInit {
       strokeColor: '#FF0000',
       strokeOpacity: 1,
       strokeWeight: 1,
-      fillOpacity: 0.01,
+      fillOpacity: 0.1,
       clickable: true,
       map: this.gMap,
       center: startAddressCoord,
@@ -136,9 +177,20 @@ export class AddLocationComponent implements OnInit {
     });
   }
 
-  private initMapAutoComplete() {
-    this.autoComplete = this.map.getGoogleAutocomplete('anotherAddress');
+  private initMapAutoComplete(bounds: any) {
+    if (this.autoComplete) {
+      this.autoComplete = null;
+    }
+    
+    this.autoComplete = this.map.getGoogleAutocomplete(
+      'anotherAddress',
+      bounds,
+      true
+    );
+  }
 
+  // needds to happen once
+  private initMapAutoCompleteEvent() {
     // get address of clicking on the single address
     this.autoComplete.addListener('place_changed', () => {
       const place = this.autoComplete.getPlace();

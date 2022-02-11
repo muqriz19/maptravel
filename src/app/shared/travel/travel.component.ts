@@ -67,17 +67,17 @@ export class TravelComponent implements OnInit, AfterViewInit {
 
     switch (travelPointType) {
       case 'start':
-        iconType = 'bi-arrow-down-square';
+        iconType = 'bi-geo-alt-fill';
 
         break;
 
       case 'mid':
-        iconType = 'bi-dot';
+        iconType = 'bi-geo-fill';
 
         break;
 
       default:
-        iconType = 'bi-arrow-down-square';
+        iconType = 'bi-geo-fill';
 
         break;
     }

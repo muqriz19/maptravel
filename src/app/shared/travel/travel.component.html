@@ -42,7 +42,10 @@
   </div>
 </div>
 
-<div class="travel-container d-flex justify-content-center flex-column">
+<div
+  class="travel-container d-flex flex-column"
+  *ngIf="allTravelPoints.length >= 1"
+>
   <div
     class="card-container"
     *ngFor="

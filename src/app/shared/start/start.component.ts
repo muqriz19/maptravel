@@ -56,7 +56,14 @@ export class StartComponent implements OnInit {
       // display modal auto
       this.ui.displayModal('#myModal').then(() => {
         // init google autocomplete
-        const autocomplete = this.map.getGoogleAutocomplete('startAddress');
+        const bounds = {
+          north: this.currentLat + 0.1,
+          south: this.currentLat - 0.1,
+          east: this.currentLong + 0.1,
+          west: this.currentLong - 0.1,
+        };
+
+        const autocomplete = this.map.getGoogleAutocomplete('startAddress', bounds, false);
 
         // get address of clicking on the single address
         autocomplete.addListener('place_changed', () => {

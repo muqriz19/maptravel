@@ -32,16 +32,22 @@ export class MapsService {
     });
   }
 
-  private getGoogle() {
+  public getGoogle() {
     console.log(google);
 
     return google;
   }
 
-  public getGoogleAutocomplete(inputHTMLID: string, anyBounds?: any) {
+  public getGoogleAutocomplete(
+    inputHTMLID: string,
+    value?: string,
+    anyBounds?: any
+  ) {
     const startInputAddress = document.getElementById(
       inputHTMLID
-    ) as HTMLElement;
+    ) as HTMLInputElement;
+
+    startInputAddress.value = value ? value : '';
 
     console.log(startInputAddress);
 
@@ -68,6 +74,51 @@ export class MapsService {
     );
 
     return autocomplete;
+  }
+
+  public geoCode(givenAddress: string) {
+    return new Promise((resolve, reject) => {
+      const google = this.getGoogle();
+      const geoCoder = new google.maps.Geocoder();
+
+      const addressObj = { address: givenAddress };
+
+      geoCoder.geocode(addressObj, (result: any, status: string) => {
+        console.log(result);
+        // console.log(status);
+
+        if (status === 'OK') {
+          const location = result[0].geometry.location;
+
+          resolve(location);
+        } else {
+          reject('Cannot geocode because ' + status);
+        }
+      });
+    });
+  }
+
+  public reverseGeoCode(lat: number, long: number) {
+    return new Promise((resolve, reject) => {
+      const google = this.getGoogle();
+
+      const geoCoder = new google.maps.Geocoder();
+      const location = { lat, lng: long };
+
+      geoCoder
+        .geocode({ location })
+        .then((response: any) => {
+          console.log(response);
+
+          if (response.results[0]) {
+            const address = response.results[0].formatted_address as string;
+            resolve(address);
+          } else {
+            reject('No results found');
+          }
+        })
+        .catch((e: any) => window.alert('Geocoder failed due to: ' + e));
+    });
   }
 
   public googleDistanceMatrix(

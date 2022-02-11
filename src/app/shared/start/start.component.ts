@@ -32,10 +32,9 @@ export class StartComponent implements OnInit {
 
   private init() {
     this.startForm = this.fb.group({
-      name: new FormControl('', [Validators.required]),
       captureAddress: new FormControl('', [Validators.required]),
       address: this.fb.group({
-        fullAddress: new FormControl('', []),
+        fullAddress: new FormControl('', [Validators.required]),
         street: new FormControl('', []),
         area: new FormControl('', []),
         state: new FormControl('', []),
@@ -75,8 +74,7 @@ export class StartComponent implements OnInit {
   }
 
   public proceedApp(): void {
-    // save the data of name and addresses
-    const name = this.startForm.get('name')!.value;
+    // save the data of addresses
 
     const fullAddress = this.startForm
       .get('address')!
@@ -99,7 +97,6 @@ export class StartComponent implements OnInit {
     );
 
     const data = {
-      name,
       address,
     };
 

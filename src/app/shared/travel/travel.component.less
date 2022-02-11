@@ -20,8 +20,23 @@
     width: 300px;
     margin: 20px;
 
-    i {
-      font-size: 40px;
+    .card-action {
+      display: flex;
+      flex-direction: column-reverse;
+      i.travel-point-icon {
+        font-size: 40px;
+        text-align: center;
+      }
+
+      i.close-btn {
+        font-size: 20px;
+        text-align: end;
+        margin: 5px;
+        &:hover {
+          color: red;
+          cursor: pointer;
+        }
+      }
     }
   }
 

@@ -57,7 +57,7 @@
             </label>
           </div>
 
-          <div class="result-container" *ngIf="templateResult! === ''">
+          <div class="result-container" [hidden]="templateResult === ''">
             <p>
               {{ templateResult }}
             </p>

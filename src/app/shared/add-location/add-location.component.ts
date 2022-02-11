@@ -31,7 +31,7 @@ export class AddLocationComponent implements OnInit {
     this.addLocationForm = this.fb.group({
       anotherAddress: new FormControl('', [Validators.required]),
       address: this.fb.group({
-        fullAddress: new FormControl('', []),
+        fullAddress: new FormControl('', [Validators.required]),
         street: new FormControl('', []),
         area: new FormControl('', []),
         state: new FormControl('', []),

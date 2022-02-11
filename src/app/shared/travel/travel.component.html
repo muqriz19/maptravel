@@ -4,7 +4,7 @@
 
 <div
   class="control-panel d-flex justify-content-center"
-  *ngIf="name.length >= 1"
+  *ngIf="allTravelPoints.length >= 1"
 >
   <div class="mb-3">
     <button
@@ -50,7 +50,10 @@
     "
   >
     <div class="card">
-      <i [class]="returnIcon(point.getType())" class="text-center"></i>
+      <div class="card-action">
+        <i [class]="returnIcon(point.getType())" class="travel-point-icon"></i>
+        <i class="bi bi-x-circle close-btn" title="Remove Location" *ngIf="!first" (click)="removeLocation(point)"></i>
+      </div>
       <div class="card-body">
         <h5 class="card-title text-center">
           {{ point.getType() | titlecase }}

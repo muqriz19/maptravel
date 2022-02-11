@@ -10,9 +10,6 @@ import { UiService } from '../ui/ui.service';
   styleUrls: ['./travel.component.less'],
 })
 export class TravelComponent implements OnInit, AfterViewInit {
-  public name = '';
-  public address!: Address;
-
   private firstTime = true;
 
   public allTravelPoints: Array<TravelPoints> = [];
@@ -31,10 +28,9 @@ export class TravelComponent implements OnInit, AfterViewInit {
       console.log(data);
 
       if (data && this.firstTime) {
-        this.name = data.name;
-        this.address = data.address as Address;
+        const startAddress = data.address as Address;
 
-        const startTravelPoint = new TravelPoints('start', this.address);
+        const startTravelPoint = new TravelPoints('start', startAddress);
 
         // add to travel points array to keep collection
         this.allTravelPoints.push(startTravelPoint);
@@ -43,26 +39,51 @@ export class TravelComponent implements OnInit, AfterViewInit {
       } else if (this.firstTime === false) {
         const address = data.address as Address;
 
-        const startTravelPoint = new TravelPoints('mid', address);
+        const travelPoint = new TravelPoints('mid', address);
 
-        // add to travel points array to keep collection
-        this.allTravelPoints.push(startTravelPoint);
+        // check if existing travel point of the prev element
+        for (let at = 0; at < this.allTravelPoints.length; at++) {
+          const prevElemIndex = this.allTravelPoints.length - 1;
+          const prevAddress =
+            this.allTravelPoints[prevElemIndex].getFullAddress();
+
+          if (prevAddress !== travelPoint.getFullAddress()) {
+            // add to travel points array to keep collection
+            this.allTravelPoints.push(travelPoint);
+            break;
+          } else {
+            // warn user
+          }
+        }
       }
 
       console.log(this.allTravelPoints);
     });
   }
 
+  public removeLocation(point: TravelPoints): void {
+    console.log(point);
+
+    const fullAddress = point.getFullAddress();
+
+    for (let fa = 0; fa < this.allTravelPoints.length; fa++) {
+      if (this.allTravelPoints[fa].getFullAddress() === fullAddress) {
+        this.allTravelPoints.splice(fa, 1);
+        break;
+      }
+    }
+  }
+
   // bring up the add locations modal
-  public openAddlocationModal() {
+  public openAddlocationModal(): void {
     this.ui.displayModal('#addAnotherAddressModal');
   }
 
-  public openCalculateModal() {
+  public openCalculateModal(): void {
     this.ui.displayModal('#calculateDistanceModal');
   }
 
-  public returnIcon(travelPointType: string) {
+  public returnIcon(travelPointType: string): string {
     let iconType = 'bi-arrow-down-square';
 
     switch (travelPointType) {
@@ -85,7 +106,7 @@ export class TravelComponent implements OnInit, AfterViewInit {
     return iconType;
   }
 
-  public reset() {
+  public reset(): void {
     this.allTravelPoints.splice(1);
   }
 }

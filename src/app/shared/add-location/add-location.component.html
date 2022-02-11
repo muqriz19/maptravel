@@ -1,0 +1,38 @@
+<div class="modal" tabindex="-1" id="addAnotherAddressModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title center-all custom-titles">
+          Add Another Address
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="dismissModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="addLocationForm" (ngSubmit)="addAnotherLocation()">
+          <div class="mb-3">
+            <label for="anotherAddress" class="form-label custom-form-labels"
+              >Address</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="anotherAddress"
+              formControlName="anotherAddress"
+            />
+          </div>
+
+          <div class="mb-3">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="addLocationForm.invalid"
+            >
+              Add Address
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<app-add-location></app-add-location>
+
+<app-calculate [allTravelPoints]="allTravelPoints"></app-calculate>
+
+<div
+  class="control-panel d-flex justify-content-center"
+  *ngIf="name.length >= 1"
+>
+  <div class="mb-3">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="openCalculateModal()"
+      [disabled]="allTravelPoints.length === 1"
+    >
+      Calculate
+    </button>
+  </div>
+
+  <div class="mb-3">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="openAddlocationModal()"
+    >
+      Add Location
+    </button>
+  </div>
+
+  <div class="mb-3">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="reset()"
+      [disabled]="allTravelPoints.length === 1"
+    >
+      Reset
+    </button>
+  </div>
+</div>
+
+<div class="travel-container d-flex justify-content-center flex-column">
+  <div
+    class="card-container"
+    *ngFor="
+      let point of allTravelPoints;
+      let i = index;
+      let first = first;
+      let last = last
+    "
+  >
+    <div class="card">
+      <i [class]="returnIcon(point.getType())" class="text-center"></i>
+      <div class="card-body">
+        <h5 class="card-title text-center">
+          {{ point.getType() | titlecase }}
+        </h5>
+        <p class="card-text text-center">
+          {{ point?.getAddress() }}
+        </p>
+      </div>
+    </div>
+
+    <div class="next-box" *ngIf="i >= 0 && !last">
+      <i class="bi-arrow-down"></i>
+    </div>
+  </div>
+</div>

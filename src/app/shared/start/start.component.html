@@ -1,0 +1,46 @@
+<div class="modal" tabindex="-1" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title center-all custom-titles">Before we begin...</h5>
+      </div>
+
+      <div class="modal-body">
+        <h6 class="text-center">Key in your name and address below</h6>
+        <form [formGroup]="startForm" (ngSubmit)="proceedApp()">
+          <div class="mb-3">
+            <label for="name" class="form-label custom-form-labels">Name</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="name"
+              id="name"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="startAddress" class="form-label custom-form-labels"
+              >Address</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="startAddress"
+              formControlName="captureAddress"
+            />
+          </div>
+
+          <div class="mb-3">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="startForm.invalid"
+            >
+              Proceed
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

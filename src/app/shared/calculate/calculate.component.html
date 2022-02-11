@@ -1,0 +1,79 @@
+<div class="modal" tabindex="-1" id="calculateDistanceModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title center-all custom-titles">
+          Calculate Distance By
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="dismissModal()"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="calculateForm" (ngSubmit)="calculateBy()">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="calculateBy"
+              id="calculateByDistance"
+              value="distance"
+              formControlName="calculateBy"
+            />
+            <label class="form-check-label" for="calculateByDistance">
+              Distance
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="calculateBy"
+              id="calculateByDuration"
+              value="duration"
+              formControlName="calculateBy"
+            />
+            <label class="form-check-label" for="calculateByDuration">
+              Duration
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="calculateBy"
+              id="calculateByDurationTraffic"
+              value="durationTraffic"
+              formControlName="calculateBy"
+            />
+            <label class="form-check-label" for="calculateByDurationTraffic">
+              Duration in Traffic
+            </label>
+          </div>
+
+          <div class="result-container" *ngIf="templateResult! === ''">
+            <p>
+              {{ templateResult }}
+            </p>
+          </div>
+
+          <div class="mb-3">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="calculateForm.invalid"
+            >
+              Calculate
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

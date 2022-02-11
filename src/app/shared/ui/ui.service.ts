@@ -93,7 +93,7 @@ export class UiService {
           if (
             addresses['types'].some((type: string) => type === 'postal_code')
           ) {
-            formGroupAddress?.get('postCode')?.setValue(addresses.long_name);
+            formGroupAddress?.get('postCode')?.setValue(Number(addresses.long_name));
           }
         }
       );

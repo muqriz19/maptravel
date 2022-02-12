@@ -30,7 +30,12 @@ export class StartComponent implements OnInit {
     this.init();
   }
 
-  private init() {
+  private init(): void {
+    this.initForm();
+    this.initGoogleAutoComplete();
+  }
+
+  private initForm(): void {
     this.startForm = this.fb.group({
       captureAddress: new FormControl('', [Validators.required]),
       address: this.fb.group({
@@ -43,19 +48,17 @@ export class StartComponent implements OnInit {
         coords: new FormControl({}, []),
       }),
     });
-
-    this.initGoogleAutoComplete();
   }
 
   private initGoogleAutoComplete() {
-    // Request for geo position if possible
+    // Request for geo position if possible to set start area location
     this.map.getGeoLocations().then((position: GeolocationPosition) => {
       this.currentLat = position.coords.latitude;
       this.currentLong = position.coords.longitude;
 
-      // display modal auto
+      // display modal automatically
       this.ui.displayModal('#myModal').then(() => {
-        // init google autocomplete
+        // define start address bounds of 10km
         const bounds = {
           north: this.currentLat + 0.1,
           south: this.currentLat - 0.1,
@@ -63,17 +66,21 @@ export class StartComponent implements OnInit {
           west: this.currentLong - 0.1,
         };
 
-        const autocomplete = this.map.getGoogleAutocomplete('startAddress', bounds, false);
+        // init google autocomplete
+        const autocomplete = this.map.getGoogleAutocomplete(
+          'startAddress',
+          bounds,
+          false
+        );
 
-        // get address of clicking on the single address
-        autocomplete.addListener('place_changed', () => {
+        // get address event of clicking on the single address
+        autocomplete.addListener('place_changed', async () => {
           const place = autocomplete.getPlace();
           const addressFormGroup = this.startForm.get('address') as FormGroup;
 
           if (place.address_components) {
-            this.ui.transformAddress(place, addressFormGroup).then(() => {
-              console.log(this.startForm.get('address')!.value);
-            });
+            // transform address object from google to input into form for later easy readable
+            await this.ui.transformAddress(place, addressFormGroup);
           }
         });
       });
@@ -82,7 +89,6 @@ export class StartComponent implements OnInit {
 
   public proceedApp(): void {
     // save the data of addresses
-
     const fullAddress = this.startForm
       .get('address')!
       .get('fullAddress')!.value;

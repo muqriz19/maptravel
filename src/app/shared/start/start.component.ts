@@ -50,41 +50,57 @@ export class StartComponent implements OnInit {
     });
   }
 
-  private initGoogleAutoComplete() {
-    // Request for geo position if possible to set start area location
-    this.map.getGeoLocations().then((position: GeolocationPosition) => {
-      this.currentLat = position.coords.latitude;
-      this.currentLong = position.coords.longitude;
+  private startApp(position: any) {
+    this.currentLat = position.coords.latitude;
+    this.currentLong = position.coords.longitude;
 
-      // display modal automatically
-      this.ui.displayModal('#myModal').then(() => {
-        // define start address bounds of 10km
-        const bounds = {
-          north: this.currentLat + 0.1,
-          south: this.currentLat - 0.1,
-          east: this.currentLong + 0.1,
-          west: this.currentLong - 0.1,
-        };
+    // display modal automatically
+    this.ui.displayModal('#myModal').then(() => {
+      // define start address bounds of 10km
+      const bounds = {
+        north: this.currentLat + 0.1,
+        south: this.currentLat - 0.1,
+        east: this.currentLong + 0.1,
+        west: this.currentLong - 0.1,
+      };
 
-        // init google autocomplete
-        const autocomplete = this.map.getGoogleAutocomplete(
-          'startAddress',
-          bounds,
-          false
-        );
+      // init google autocomplete
+      const autocomplete = this.map.getGoogleAutocomplete(
+        'startAddress',
+        bounds,
+        false
+      );
 
-        // get address event of clicking on the single address
-        autocomplete.addListener('place_changed', async () => {
-          const place = autocomplete.getPlace();
-          const addressFormGroup = this.startForm.get('address') as FormGroup;
+      // get address event of clicking on the single address
+      autocomplete.addListener('place_changed', async () => {
+        const place = autocomplete.getPlace();
+        const addressFormGroup = this.startForm.get('address') as FormGroup;
 
-          if (place.address_components) {
-            // transform address object from google to input into form for later easy readable
-            await this.ui.transformAddress(place, addressFormGroup);
-          }
-        });
+        if (place.address_components) {
+          // transform address object from google to input into form for later easy readable
+          await this.ui.transformAddress(place, addressFormGroup);
+        }
       });
     });
+  }
+
+  private initGoogleAutoComplete() {
+    // Request for geo position if possible to set start area location
+    this.map
+      .getGeoLocations()
+      .then((position: GeolocationPosition) => {
+        console.log(position);
+        this.startApp(position);
+      })
+      .catch((e) => {
+        // pass in default KL lat/long
+        this.startApp({
+          coords: {
+            latitude: 3.139003,
+            longitude: 101.686852,
+          },
+        });
+      });
   }
 
   public proceedApp(): void {

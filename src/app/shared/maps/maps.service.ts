@@ -12,23 +12,30 @@ export class MapsService {
 
   public getGeoLocations() {
     return new Promise<GeolocationPosition>((resolve) => {
+      let geoPosition = {
+        coords: {
+          latitude: 3.139003,
+          longitude: 101.686852,
+        },
+      };
+
       // check if can get location
       // return GeolocationPosition
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          resolve(position);
-        });
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve(position);
+          },
+          (err) => {
+            resolve(geoPosition as GeolocationPosition);
+          }
+        );
       } else {
         // if not return default KL lat and long
-        let geoPosition = {
-          coords: {
-            latitude: 3.139003,
-            longitude: 101.686852,
-          },
-        };
-
         resolve(geoPosition as GeolocationPosition);
       }
+    }).catch((e) => {
+      return e;
     });
   }
 

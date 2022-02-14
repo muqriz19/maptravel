@@ -14,4 +14,8 @@ Run `ng serve` will run on http://localhost:4200 - run on a browser
 
 ## Build
 
-Run `ng build` to build the project. The build files are stoed in the `dist/` directory.
+Run `ng build --configuration development` to build the project. The build files are stoed in the `dist/` directory.
+
+## Production
+
+Run `ng build --configuration development` to build the project. The build files are stoed in the `dist/` directory.

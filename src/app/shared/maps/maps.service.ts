@@ -33,7 +33,7 @@ export class MapsService {
   }
 
   public getGoogle() {
-    console.log(google);
+    // console.log(google);
 
     return google;
   }
@@ -49,8 +49,6 @@ export class MapsService {
     ) as HTMLInputElement;
 
     startInputAddress.value = value ? value : '';
-
-    console.log(startInputAddress);
 
     // 10km === 0.1
     // const bounds = {
@@ -130,8 +128,8 @@ export class MapsService {
     destName: string
   ): Promise<Calculate> {
     return new Promise((resolve) => {
-      console.log(originName);
-      console.log(destName);
+      // console.log(originName);
+      // console.log(destName);
 
       const google = this.getGoogle();
 
@@ -204,7 +202,7 @@ export class MapsService {
           durationInTrafficValue
         );
 
-        console.log(travelData);
+        // console.log(travelData);
 
         const calculateDistance = new Calculate(
           origin,

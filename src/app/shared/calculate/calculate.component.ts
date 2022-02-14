@@ -32,13 +32,13 @@ export class CalculateComponent implements OnInit {
     this.initForm();
   }
 
-  private initForm() {
+  private initForm(): void {
     this.calculateForm = this.fb.group({
       calculateBy: new FormControl('distance', [Validators.required]),
     });
   }
 
-  public dismissModal() {
+  public dismissModal():void {
     this.templateResult = '';
     const initValue = {
       calculateBy: 'distance',
@@ -50,8 +50,6 @@ export class CalculateComponent implements OnInit {
 
   public async calculateBy() {
     let calculateBy = this.calculateForm.get('calculateBy')!.value;
-
-    console.log(this.allTravelPoints);
 
     const allCalculateData = [];
 
@@ -83,14 +81,9 @@ export class CalculateComponent implements OnInit {
     let accumulateValue = 0;
     // add up the values
     allCalculateData.forEach((calcData) => {
-      console.log(calcData.getValue(calculateBy));
-
       accumulateValue += calcData.getValue(calculateBy);
     });
 
     this.templateResult = this.ui.conversion(calculateBy, accumulateValue);
-
-    console.log(accumulateValue);
-    console.log(this.templateResult);
   }
 }

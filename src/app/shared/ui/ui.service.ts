@@ -50,11 +50,8 @@ export class UiService {
   // transform address from
   public transformAddress(googleAddress: any, formGroupAddress: FormGroup) {
     console.log(googleAddress);
-    // console.log(googleAddress.geometry.location.lat());
-    // console.log(googleAddress.geometry.location.lng());
 
     return new Promise<void>((resolve) => {
-      // console.log(googleAddress);
       formGroupAddress?.get('fullAddress')?.setValue(googleAddress.name);
 
       // for distance matrix

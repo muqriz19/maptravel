@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { MapsService } from '../maps/maps.service';
+import { AlertsService } from 'src/app/shared/alerts/alerts/alerts.service';
 import { Address } from '../models/address';
 import { TravelPoints } from '../models/travelpoints';
 import { UiService } from '../ui/ui.service';
@@ -14,7 +14,7 @@ export class TravelComponent implements OnInit, AfterViewInit {
 
   public allTravelPoints: Array<TravelPoints> = [];
 
-  constructor(private ui: UiService, private map: MapsService) {}
+  constructor(private ui: UiService, private alerts: AlertsService) {}
 
   ngOnInit(): void {}
 
@@ -22,14 +22,15 @@ export class TravelComponent implements OnInit, AfterViewInit {
     this.getData();
   }
 
-  // get data after start input name and address
+  // get data after input address
   private getData(): void {
     this.ui.getData().subscribe((data) => {
-      console.log(data);
+      // console.log(data);
 
       if (data && this.firstTime) {
         const startAddress = data.address as Address;
 
+        // this is the starting address travel point - in no matter what it should not be deleted/removed
         const startTravelPoint = new TravelPoints('start', startAddress);
 
         // add to travel points array to keep collection
@@ -39,9 +40,10 @@ export class TravelComponent implements OnInit, AfterViewInit {
       } else if (this.firstTime === false) {
         const address = data.address as Address;
 
+        // all other new address added should be classified as mid
         const travelPoint = new TravelPoints('mid', address);
 
-        // check if existing travel point of the prev element
+        // check if existing travel point of the prev element is same. If same warn the use not to put same address
         for (let at = 0; at < this.allTravelPoints.length; at++) {
           const prevElemIndex = this.allTravelPoints.length - 1;
           const prevAddress =
@@ -53,17 +55,15 @@ export class TravelComponent implements OnInit, AfterViewInit {
             break;
           } else {
             // warn user
+            this.alerts.displayAlerts('danger', 'Cannot put same travel point as previous last travel');
           }
         }
       }
-
-      console.log(this.allTravelPoints);
     });
   }
 
+  // remove location when user clicks the x icon
   public removeLocation(point: TravelPoints): void {
-    console.log(point);
-
     const fullAddress = point.getFullAddress();
 
     for (let fa = 0; fa < this.allTravelPoints.length; fa++) {
@@ -78,10 +78,12 @@ export class TravelComponent implements OnInit, AfterViewInit {
     this.ui.displayModal('#addAnotherAddressModal');
   }
 
+  // bring up the calculate modal
   public openCalculateModal(): void {
     this.ui.displayModal('#calculateDistanceModal');
   }
 
+  // returns appropriate icon for each travel point
   public returnIcon(travelPointType: string): string {
     let iconType = 'bi-arrow-down-square';
 
@@ -105,6 +107,7 @@ export class TravelComponent implements OnInit, AfterViewInit {
     return iconType;
   }
 
+  // clears all travel points except for the starting point
   public reset(): void {
     this.allTravelPoints.splice(1);
   }

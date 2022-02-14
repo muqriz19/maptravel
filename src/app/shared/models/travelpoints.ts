@@ -9,19 +9,19 @@ export class TravelPoints {
     this.address = address;
   }
 
-  public getType() {
+  public getType(): string {
     return this.type;
   }
 
-  public getAddress() {
+  public getAddress(): string {
     return this.address.getAddress();
   }
 
-  public getCoordinates() {
+  public getCoordinates(): any {
     return this.address.getCoordinates();
   }
 
-  public getFullAddress() {
+  public getFullAddress(): string {
     return this.address.getFullAddress();
   }
 }

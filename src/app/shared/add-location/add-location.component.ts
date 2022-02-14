@@ -37,13 +37,13 @@ export class AddLocationComponent implements OnInit {
     this.init();
   }
 
-  private init() {
+  private init(): void {
     this.initForm();
 
     // receive data from first time address
     this.ui.getData().subscribe((data) => {
       if (data && this.firstTime) {
-        console.log(data);
+        // console.log(data);
         // set for bound later
         this.lat = (data.address as Address).getCoordinates().lat;
         this.long = (data.address as Address).getCoordinates().long;
@@ -86,14 +86,11 @@ export class AddLocationComponent implements OnInit {
 
     // listen to range circle values update
     this.addLocationForm.get('range')?.valueChanges.subscribe((value) => {
-      console.log(value);
       const circleRange = value * 1000;
-      console.log(circleRange);
       // update circle radius
       this.updateCircleRange(circleRange);
 
       const boundsKM = (value * 1000) / 1000 / 100;
-      console.log(boundsKM);
 
       const bounds = {
         north: this.lat + boundsKM,
@@ -101,8 +98,6 @@ export class AddLocationComponent implements OnInit {
         east: this.long + boundsKM,
         west: this.long - boundsKM,
       };
-
-      console.log(bounds);
 
       // update bounds aswell
       this.initMapAutoComplete(bounds);
@@ -154,7 +149,7 @@ export class AddLocationComponent implements OnInit {
 
     // click event for inside range cicle only
     this.rangeCirlce.addListener('click', (ev: any) => {
-      console.log(ev);
+      // console.log(ev);
 
       const lat = ev.latLng.lat();
       const long = ev.latLng.lng();
@@ -164,7 +159,7 @@ export class AddLocationComponent implements OnInit {
 
       // show on address field
       this.map.reverseGeoCode(lat, long).then((address) => {
-        console.log(address);
+        // console.log(address);
 
         this.addLocationForm.get('anotherAddress')?.setValue(address as string);
 
@@ -188,18 +183,17 @@ export class AddLocationComponent implements OnInit {
       this.autoComplete.unbind('bounds');
       this.autoComplete.setBounds(bounds);
 
-      console.log(this.gMap.markers);
       this.currentMarker.setMap(null);
     }
   }
 
   // needds to happen once
-  private initMapAutoCompleteEvent() {
+  private initMapAutoCompleteEvent():void {
     // get address of clicking on the single address
     this.autoComplete.addListener('place_changed', () => {
       const place = this.autoComplete.getPlace();
+      // console.log(place);
       const addressFormGroup = this.addLocationForm.get('address') as FormGroup;
-      console.log(place);
 
       // also update pin to the map based on lat long
       const lat = place.geometry.location.lat();
@@ -216,7 +210,7 @@ export class AddLocationComponent implements OnInit {
   }
 
   // only change the one that created via initMap function
-  public updateNewAddressMarker(lat: number, long: number) {
+  public updateNewAddressMarker(lat: number, long: number): void {
     const location = {
       lat,
       lng: long,
@@ -229,7 +223,7 @@ export class AddLocationComponent implements OnInit {
   }
 
   // update range circle
-  public updateCircleRange(rangeValue: number) {
+  public updateCircleRange(rangeValue: number): void {
     this.rangeCirlce.setRadius(rangeValue);
   }
 

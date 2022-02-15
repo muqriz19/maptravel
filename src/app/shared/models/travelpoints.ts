@@ -21,6 +21,10 @@ export class TravelPoints {
     return this.address.getGAddress();
   }
 
+  public getGeneralName(): string {
+    return this.address.getGeneralName();
+  }
+
   public getCoordinates(): any {
     return this.address.getCoordinates();
   }

@@ -64,11 +64,11 @@ export class CalculateComponent implements OnInit {
       if (this.allTravelPoints[at] && this.allTravelPoints[nextIndex]) {
         // get origin
         const originCoords = this.allTravelPoints[at].getCoordinates();
-        const originName = this.allTravelPoints[at].getGAddress();
+        const originName = this.allTravelPoints[at].getGeneralName();
 
         // get destination
         const destCoords = this.allTravelPoints[nextIndex].getCoordinates();
-        const destName = this.allTravelPoints[nextIndex].getGAddress();
+        const destName = this.allTravelPoints[nextIndex].getGeneralName();
 
         // pass to google distance matrix
         const calculateData = await this.map.googleDistanceMatrix(

@@ -43,8 +43,12 @@ export class Address {
     ${this.state}${this.state !== '' ? ',' : ''}`;
   }
 
-  public getGAddress() {
+  public getGAddress(): string {
     return this.googleAddress;
+  }
+
+  public getGeneralName(): string {
+    return this.generalName;
   }
 
   public getCoordinates(): any {

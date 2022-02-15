@@ -12,10 +12,9 @@
       <button
         type="button"
         class="btn btn-primary"
-        (click)="openCalculateModal()"
-        [disabled]="allTravelPoints.length === 1"
+        (click)="openAddlocationModal()"
       >
-        Calculate
+        Add Location
       </button>
     </div>
 
@@ -23,9 +22,10 @@
       <button
         type="button"
         class="btn btn-primary"
-        (click)="openAddlocationModal()"
+        (click)="openCalculateModal()"
+        [disabled]="allTravelPoints.length === 1"
       >
-        Add Location
+        Calculate
       </button>
     </div>
 
@@ -70,7 +70,7 @@
           {{ point.getType() | titlecase }}
         </h5>
         <p class="card-text text-center">
-          {{ point?.getGAddress() }}
+          {{ point?.getGeneralName() }}
         </p>
       </div>
     </div>

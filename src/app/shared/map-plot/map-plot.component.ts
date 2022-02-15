@@ -44,7 +44,7 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
     // receive data from first time address
     this.ui.getData().subscribe((data) => {
       if (data !== null && this.isFirstTime) {
-        const address = (data.address as Address).getGAddress();
+        const address = (data.address as Address).getGeneralName();
         const lat = (data.address as Address).getCoordinates().lat;
         const long = (data.address as Address).getCoordinates().long;
 
@@ -53,7 +53,7 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
 
         this.isFirstTime = false;
       } else if (data !== null && this.isFirstTime === false) {
-        const address = (data.address as Address).getGAddress();
+        const address = (data.address as Address).getGeneralName();
         const lat = (data.address as Address).getCoordinates().lat;
         const long = (data.address as Address).getCoordinates().long;
 
@@ -86,13 +86,18 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       // console.log(this.el.nativeElement);
+      const tempHeight = this.el.nativeElement.parentElement.clientHeight;
+      const height = String(tempHeight < 300 ? 300 : tempHeight - 50) + 'px';
 
-      this.mapStyles.height =
-        String(this.el.nativeElement.parentElement.clientHeight - 50) + 'px';
-      this.mapStyles.width =
-        String(
-          this.el.nativeElement.parentElement.parentElement.clientWidth / 2
-        ) + 'px';
+      const tempWidth =
+        this.el.nativeElement.parentElement.parentElement.clientWidth;
+      const width = String(tempWidth < 300 ? 300 : tempWidth - 50) + 'px';
+
+      this.mapStyles.height = height;
+
+      this.mapStyles.width = width;
+
+      console.log(this.mapStyles);
     }, 500);
   }
 

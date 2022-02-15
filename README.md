@@ -18,4 +18,4 @@ Run `ng build --configuration development` to build the project. The build files
 
 ## Production
 
-Run `ng build --configuration development` to build the project. The build files are stoed in the `dist/` directory.
+Run `ng build --configuration production` to build the project. The build files are stoed in the `dist/` directory.

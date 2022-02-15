@@ -128,6 +128,27 @@ export class MapsService {
     });
   }
 
+  public googleDirection(from: string, to: string) {
+    return new Promise((resolve, reject) => {
+      const google = this.getGoogle();
+      const directionService = new google.maps.DirectionsService();
+
+      directionService
+        .route({
+          origin: from,
+          destination: to,
+          travelMode: google.maps.TravelMode.DRIVING,
+        })
+        .then((response: any) => {
+            console.log(response);
+            resolve(response);
+        })
+        .catch((e: any) => {
+          reject(e);
+        });
+    });
+  }
+
   public googleDistanceMatrix(
     originCoords: any,
     originName: string,

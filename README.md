@@ -22,4 +22,4 @@ Run `ng build --configuration production --aot` to build the project. The build 
 
 OR
 
-Run `ng buildProd`.
+Run `npm run buildProd`.

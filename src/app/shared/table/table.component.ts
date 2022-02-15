@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ColDef, GridApi, GridOptions } from 'ag-grid-community';
+import { GridOptions } from 'ag-grid-community';
 import { MapsService } from '../maps/maps.service';
 import { Address } from '../models/address';
 import { Calculate } from '../models/calculate';
@@ -57,13 +57,13 @@ export class TableComponent implements OnInit, AfterViewInit {
   private init(): void {
     this.ui.getData().subscribe((data) => {
       if (data !== null && this.isFirst) {
-        this.isFirst = false;
         const address = data.address as Address;
 
         const travelPoint = new TravelPoints('start', address);
 
         this.tempDataRow.push(travelPoint);
 
+        this.isFirst = false;
         this.initGrid();
       } else if (data !== null && this.isFirst === false) {
         const address = data.address as Address;

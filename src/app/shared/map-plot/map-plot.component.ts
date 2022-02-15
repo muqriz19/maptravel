@@ -87,7 +87,7 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       // console.log(this.el.nativeElement);
       const tempHeight = this.el.nativeElement.parentElement.clientHeight;
-      const height = String(tempHeight < 300 ? 300 : tempHeight - 50) + 'px';
+      const height = String(tempHeight < 500 ? 500 : tempHeight - 50) + 'px';
 
       const tempWidth =
         this.el.nativeElement.parentElement.parentElement.clientWidth;

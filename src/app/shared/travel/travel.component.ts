@@ -46,10 +46,9 @@ export class TravelComponent implements OnInit, AfterViewInit {
         // check if existing travel point of the prev element is same. If same warn the use not to put same address
         for (let at = 0; at < this.allTravelPoints.length; at++) {
           const prevElemIndex = this.allTravelPoints.length - 1;
-          const prevAddress =
-            this.allTravelPoints[prevElemIndex].getFullAddress();
+          const prevAddress = this.allTravelPoints[prevElemIndex].getAddress();
 
-          if (prevAddress !== travelPoint.getFullAddress()) {
+          if (prevAddress !== travelPoint.getAddress()) {
             // add to travel points array to keep collection
             this.allTravelPoints.push(travelPoint);
             break;
@@ -67,10 +66,10 @@ export class TravelComponent implements OnInit, AfterViewInit {
 
   // remove location when user clicks the x icon
   public removeLocation(point: TravelPoints): void {
-    const fullAddress = point.getFullAddress();
+    const address = point.getAddress();
 
     for (let fa = 0; fa < this.allTravelPoints.length; fa++) {
-      if (this.allTravelPoints[fa].getFullAddress() === fullAddress) {
+      if (this.allTravelPoints[fa].getAddress() === address) {
         this.allTravelPoints.splice(fa, 1);
       }
     }

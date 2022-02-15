@@ -74,7 +74,8 @@ export class AddLocationComponent implements OnInit {
       range: new FormControl(10, []),
       anotherAddress: new FormControl('', [Validators.required]),
       address: this.fb.group({
-        fullAddress: new FormControl('', [Validators.required]),
+        generalName: new FormControl('', [Validators.required]),
+        streetNo: new FormControl(0, []),
         street: new FormControl('', []),
         area: new FormControl('', []),
         state: new FormControl('', []),
@@ -188,7 +189,7 @@ export class AddLocationComponent implements OnInit {
   }
 
   // needds to happen once
-  private initMapAutoCompleteEvent():void {
+  private initMapAutoCompleteEvent(): void {
     // get address of clicking on the single address
     this.autoComplete.addListener('place_changed', () => {
       const place = this.autoComplete.getPlace();
@@ -203,7 +204,7 @@ export class AddLocationComponent implements OnInit {
 
       if (place.address_components) {
         this.ui.transformAddress(place, addressFormGroup).then(() => {
-          console.log(this.addLocationForm.get('address')!.value);
+          console.log(this.addLocationForm.value);
         });
       }
     });
@@ -229,9 +230,12 @@ export class AddLocationComponent implements OnInit {
 
   public addAnotherLocation(): void {
     // save the addresses
-    const fullAddress = this.addLocationForm
+    const generalName = this.addLocationForm
       .get('address')!
-      .get('fullAddress')!.value;
+      .get('generalName')!.value;
+    const streetNo = this.addLocationForm
+      .get('address')!
+      .get('streetNo')!.value;
     const street = this.addLocationForm.get('address')!.get('street')!.value;
     const area = this.addLocationForm.get('address')!.get('area')!.value;
     const state = this.addLocationForm.get('address')!.get('state')!.value;
@@ -240,15 +244,18 @@ export class AddLocationComponent implements OnInit {
       .get('address')!
       .get('postCode')!.value;
     const coords = this.addLocationForm.get('address')!.get('coords')!.value;
+    const googleName = this.addLocationForm.get('anotherAddress')?.value;
 
     const address = new Address(
-      fullAddress,
+      generalName,
+      streetNo,
       street,
       area,
       state,
       city,
       postCode,
-      coords
+      coords,
+      googleName
     );
 
     const data = {
@@ -264,7 +271,7 @@ export class AddLocationComponent implements OnInit {
       range: 10,
       anotherAddress: '',
       address: {
-        fullAddress: '',
+        generalName: '',
         street: '',
         area: '',
         state: '',

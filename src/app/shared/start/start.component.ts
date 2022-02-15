@@ -39,7 +39,8 @@ export class StartComponent implements OnInit {
     this.startForm = this.fb.group({
       captureAddress: new FormControl('', [Validators.required]),
       address: this.fb.group({
-        fullAddress: new FormControl('', [Validators.required]),
+        generalName: new FormControl('', [Validators.required]),
+        streetNo: new FormControl(0, []),
         street: new FormControl('', []),
         area: new FormControl('', []),
         state: new FormControl('', []),
@@ -78,7 +79,9 @@ export class StartComponent implements OnInit {
 
         if (place.address_components) {
           // transform address object from google to input into form for later easy readable
-          await this.ui.transformAddress(place, addressFormGroup);
+          await this.ui.transformAddress(place, addressFormGroup).then(() => {
+            console.log(this.startForm.value);
+          });
         }
       });
     });
@@ -105,24 +108,28 @@ export class StartComponent implements OnInit {
 
   public proceedApp(): void {
     // save the data of addresses
-    const fullAddress = this.startForm
+    const generalName = this.startForm
       .get('address')!
-      .get('fullAddress')!.value;
+      .get('generalName')!.value;
     const street = this.startForm.get('address')!.get('street')!.value;
+    const streetNo = this.startForm.get('address')!.get('streetNo')!.value;
     const area = this.startForm.get('address')!.get('area')!.value;
     const state = this.startForm.get('address')!.get('state')!.value;
     const city = this.startForm.get('address')!.get('city')!.value;
     const postCode = this.startForm.get('address')!.get('postCode')!.value;
     const coords = this.startForm.get('address')!.get('coords')!.value;
+    const googleName = this.startForm.get('captureAddress')?.value;
 
     const address = new Address(
-      fullAddress,
+      generalName,
       street,
+      streetNo,
       area,
       state,
       city,
       postCode,
-      coords
+      coords,
+      googleName
     );
 
     const data = {

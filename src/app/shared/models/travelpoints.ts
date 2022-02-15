@@ -17,11 +17,11 @@ export class TravelPoints {
     return this.address.getAddress();
   }
 
-  public getCoordinates(): any {
-    return this.address.getCoordinates();
+  public getGAddress(): string {
+    return this.address.getGAddress();
   }
 
-  public getFullAddress(): string {
-    return this.address.getFullAddress();
+  public getCoordinates(): any {
+    return this.address.getCoordinates();
   }
 }

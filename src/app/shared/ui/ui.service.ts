@@ -64,7 +64,7 @@ export class UiService {
     console.log(googleAddress);
 
     return new Promise<void>((resolve) => {
-      formGroupAddress?.get('fullAddress')?.setValue(googleAddress.name);
+      formGroupAddress?.get('generalName')?.setValue(googleAddress.name);
 
       // for distance matrix
       const coords = {
@@ -77,6 +77,10 @@ export class UiService {
 
       googleAddress.address_components.forEach(
         (addresses: any, index: number) => {
+          if (addresses['types'].some((type: string) => type === 'street_number')) {
+            formGroupAddress?.get('streetNo')?.setValue(Number(addresses.long_name));
+          }
+
           if (addresses['types'].some((type: string) => type === 'route')) {
             formGroupAddress?.get('street')?.setValue(addresses.long_name);
           }

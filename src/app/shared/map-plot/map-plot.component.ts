@@ -44,7 +44,7 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
     // receive data from first time address
     this.ui.getData().subscribe((data) => {
       if (data !== null && this.isFirstTime) {
-        const address = (data.address as Address).getAddress();
+        const address = (data.address as Address).getGAddress();
         const lat = (data.address as Address).getCoordinates().lat;
         const long = (data.address as Address).getCoordinates().long;
 
@@ -53,7 +53,7 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
 
         this.isFirstTime = false;
       } else if (data !== null && this.isFirstTime === false) {
-        const address = (data.address as Address).getAddress();
+        const address = (data.address as Address).getGAddress();
         const lat = (data.address as Address).getCoordinates().lat;
         const long = (data.address as Address).getCoordinates().long;
 

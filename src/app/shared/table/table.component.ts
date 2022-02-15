@@ -92,10 +92,10 @@ export class TableComponent implements OnInit, AfterViewInit {
 
       if (this.tempDataRow[this.nextIndex]) {
         const fromCoords = this.tempDataRow[this.currentIndex].getCoordinates();
-        const fromName = this.tempDataRow[this.currentIndex].getAddress();
+        const fromName = this.tempDataRow[this.currentIndex].getGAddress();
 
         const toCoords = this.tempDataRow[this.nextIndex].getCoordinates();
-        const toName = this.tempDataRow[this.nextIndex].getAddress();
+        const toName = this.tempDataRow[this.nextIndex].getGAddress();
 
         const calculateData = await this.map.googleDistanceMatrix(
           fromCoords,

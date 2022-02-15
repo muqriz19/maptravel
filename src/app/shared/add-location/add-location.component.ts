@@ -42,7 +42,7 @@ export class AddLocationComponent implements OnInit {
 
     // receive data from first time address
     this.ui.getData().subscribe((data) => {
-      if (data && this.firstTime) {
+      if (data !== null && this.firstTime) {
         // console.log(data);
         // set for bound later
         this.lat = (data.address as Address).getCoordinates().lat;

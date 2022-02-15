@@ -175,7 +175,7 @@ export class MapsService {
     });
   }
 
-  public parseDistanceResults(
+  private parseDistanceResults(
     response: any,
     status: string
   ): Promise<Calculate> {

@@ -23,6 +23,6 @@ export class AlertsService {
 
     setTimeout(() => {
       alertPlaceholder.innerHTML = '';
-    }, 10000);
+    }, 5000);
   }
 }

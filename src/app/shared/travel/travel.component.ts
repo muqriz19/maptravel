@@ -27,7 +27,7 @@ export class TravelComponent implements OnInit, AfterViewInit {
     this.ui.getData().subscribe((data) => {
       // console.log(data);
 
-      if (data && this.firstTime) {
+      if (data !== null && this.firstTime) {
         const startAddress = data.address as Address;
 
         // this is the starting address travel point - in no matter what it should not be deleted/removed
@@ -37,7 +37,7 @@ export class TravelComponent implements OnInit, AfterViewInit {
         this.allTravelPoints.push(startTravelPoint);
 
         this.firstTime = false;
-      } else if (this.firstTime === false) {
+      } else if (data !== null && this.firstTime === false) {
         const address = data.address as Address;
 
         // all other new address added should be classified as mid
@@ -55,7 +55,10 @@ export class TravelComponent implements OnInit, AfterViewInit {
             break;
           } else {
             // warn user
-            this.alerts.displayAlerts('danger', 'Cannot put same travel point as previous last travel');
+            this.alerts.displayAlerts(
+              'danger',
+              'Cannot put same travel point as previous last travel'
+            );
           }
         }
       }
@@ -110,5 +113,8 @@ export class TravelComponent implements OnInit, AfterViewInit {
   // clears all travel points except for the starting point
   public reset(): void {
     this.allTravelPoints.splice(1);
+
+    // send to other components to reset
+    this.ui.sendActions('reset');
   }
 }

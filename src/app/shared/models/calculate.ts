@@ -16,7 +16,7 @@ export class Calculate {
   }
 
   public getFrom() {
-    this.from;
+    return this.from;
   }
 
   public getValue(whatValue: string) {

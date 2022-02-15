@@ -29,6 +29,10 @@ export class CalculateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.init();
+  }
+
+  private init(): void {
     this.initForm();
   }
 
@@ -38,7 +42,7 @@ export class CalculateComponent implements OnInit {
     });
   }
 
-  public dismissModal():void {
+  public dismissModal(): void {
     this.templateResult = '';
     const initValue = {
       calculateBy: 'distance',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as bootstrap from 'bootstrap';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +10,7 @@ export class UiService {
   private currentModal!: bootstrap.Modal;
 
   private sourceData = new BehaviorSubject<any>(null);
+  private actionSourceData = new BehaviorSubject<any>(null);
 
   constructor() {}
 
@@ -45,6 +46,17 @@ export class UiService {
 
   public getData() {
     return this.sourceData.asObservable();
+  }
+
+  public sendActions(actions: string): Promise<void> {
+    return new Promise((resolve) => {
+      this.actionSourceData.next(actions);
+      resolve();
+    });
+  }
+
+  public getActions(): Observable<any> {
+    return this.actionSourceData.asObservable();
   }
 
   // transform address from
@@ -90,7 +102,9 @@ export class UiService {
           if (
             addresses['types'].some((type: string) => type === 'postal_code')
           ) {
-            formGroupAddress?.get('postCode')?.setValue(Number(addresses.long_name));
+            formGroupAddress
+              ?.get('postCode')
+              ?.setValue(Number(addresses.long_name));
           }
         }
       );
@@ -102,7 +116,11 @@ export class UiService {
   public conversion(convertofWhat: string, value: number) {
     let convert = '';
 
-    if (convertofWhat === 'seconds' || convertofWhat === 'duration' || convertofWhat === 'durationTraffic') {
+    if (
+      convertofWhat === 'seconds' ||
+      convertofWhat === 'duration' ||
+      convertofWhat === 'durationTraffic'
+    ) {
       if (value < 60) {
         // hours
         convert = String(value) + ' seconds';
@@ -114,11 +132,15 @@ export class UiService {
       } else if (value >= 3600 && value < 86400) {
         // hours
         // now minutes
-        let conversion = Math.round((((value + Number.EPSILON) / 3600) * 1) / 1);
+        let conversion = Math.round(
+          (((value + Number.EPSILON) / 3600) * 1) / 1
+        );
         convert = String(conversion) + ' hour';
       } else if (value >= 86400) {
         // day
-        let conversion = Math.round((((value + Number.EPSILON) / 86400) * 1) / 1);
+        let conversion = Math.round(
+          (((value + Number.EPSILON) / 86400) * 1) / 1
+        );
         convert = String(conversion) + ' day';
       }
     }

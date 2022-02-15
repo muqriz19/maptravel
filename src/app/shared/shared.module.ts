@@ -9,11 +9,13 @@ import { AddLocationComponent } from './add-location/add-location.component';
 import { CalculateComponent } from './calculate/calculate.component';
 import { AlertsComponent } from './alerts/alerts.component';
 import { AlertsService } from './alerts/alerts/alerts.service';
+import { TableComponent } from './table/table.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
-  declarations: [StartComponent, TravelComponent, AddLocationComponent, CalculateComponent, AlertsComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  declarations: [StartComponent, TravelComponent, AddLocationComponent, CalculateComponent, AlertsComponent, TableComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, AgGridModule.withComponents([])],
   providers: [UiService, MapsService, AlertsService],
-  exports: [StartComponent, TravelComponent, AddLocationComponent, CalculateComponent, AlertsComponent],
+  exports: [StartComponent, TravelComponent, AddLocationComponent, CalculateComponent, AlertsComponent, TableComponent],
 })
 export class SharedModule {}

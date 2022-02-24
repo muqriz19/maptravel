@@ -57,8 +57,6 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
         const lat = (data.address as Address).getCoordinates().lat;
         const long = (data.address as Address).getCoordinates().long;
 
-        console.log(address);
-
         this.addPoint(lat, long, address);
       }
     });
@@ -147,9 +145,6 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
           const toLong = path[path.length - 1].lng();
 
           const toCoords = { lat: toLat, lng: toLong };
-
-          console.log(fromCoords);
-          console.log(toCoords);
 
           this.addMarker(fromCoords, toCoords);
 

@@ -140,8 +140,8 @@ export class MapsService {
           travelMode: google.maps.TravelMode.DRIVING,
         })
         .then((response: any) => {
-            console.log(response);
-            resolve(response);
+          console.log(response);
+          resolve(response);
         })
         .catch((e: any) => {
           reject(e);
@@ -169,6 +169,9 @@ export class MapsService {
         destCoords.lat,
         destCoords.long
       );
+
+      console.log(originCoords);
+      console.log(destCoords);
 
       let service = new google.maps.DistanceMatrixService();
 

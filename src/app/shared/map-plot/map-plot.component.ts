@@ -44,7 +44,7 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
     // receive data from first time address
     this.ui.getData().subscribe((data) => {
       if (data !== null && this.isFirstTime) {
-        const address = (data.address as Address).getGeneralName();
+        const address = (data.address as Address).getGAddress();
         const lat = (data.address as Address).getCoordinates().lat;
         const long = (data.address as Address).getCoordinates().long;
 
@@ -53,9 +53,11 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
 
         this.isFirstTime = false;
       } else if (data !== null && this.isFirstTime === false) {
-        const address = (data.address as Address).getGeneralName();
+        const address = (data.address as Address).getGAddress();
         const lat = (data.address as Address).getCoordinates().lat;
         const long = (data.address as Address).getCoordinates().long;
+
+        console.log(address);
 
         this.addPoint(lat, long, address);
       }
@@ -146,8 +148,8 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
 
           const toCoords = { lat: toLat, lng: toLong };
 
-          // console.log(fromCoords);
-          // console.log(toCoords);
+          console.log(fromCoords);
+          console.log(toCoords);
 
           this.addMarker(fromCoords, toCoords);
 

@@ -159,7 +159,7 @@ export class AddLocationComponent implements OnInit {
       this.updateNewAddressMarker(lat, long);
 
       // show on address field
-      this.map.reverseGeoCode(lat, long).then((address) => {
+      this.map.reverseGeoCode(lat, long, 'address').then((address) => {
         // console.log(address);
 
         this.addLocationForm.get('anotherAddress')?.setValue(address as string);

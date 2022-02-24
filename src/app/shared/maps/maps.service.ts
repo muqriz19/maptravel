@@ -105,12 +105,14 @@ export class MapsService {
     });
   }
 
-  public reverseGeoCode(lat: number, long: number) {
+  public reverseGeoCode(lat: number, long: number, type: string) {
     return new Promise((resolve, reject) => {
       const google = this.getGoogle();
 
       const geoCoder = new google.maps.Geocoder();
       const location = { lat, lng: long };
+
+      console.log(location);
 
       geoCoder
         .geocode({ location })
@@ -118,8 +120,16 @@ export class MapsService {
           console.log(response);
 
           if (response.results[0]) {
-            const address = response.results[0].formatted_address as string;
-            resolve(address);
+            let result = '';
+            if (type === 'address') {
+              result = response.results[0].formatted_address as string;
+            }
+
+            if (type === 'placeId') {
+              result = response.results[0].place_id;
+            }
+
+            resolve(result);
           } else {
             reject('No results found');
           }
@@ -128,15 +138,17 @@ export class MapsService {
     });
   }
 
-  public googleDirection(from: string, to: string) {
+  public googleDirection(from: any, to: any) {
     return new Promise((resolve, reject) => {
       const google = this.getGoogle();
       const directionService = new google.maps.DirectionsService();
 
+      console.log(from, to);
+
       directionService
         .route({
-          origin: from,
-          destination: to,
+          origin: { placeId: from },
+          destination: { placeId: to },
           travelMode: google.maps.TravelMode.DRIVING,
         })
         .then((response: any) => {

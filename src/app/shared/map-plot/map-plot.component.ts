@@ -115,16 +115,31 @@ export class MapPlotComponent implements OnInit, AfterViewInit {
     this.calculateRoute();
   }
 
-  private calculateRoute(): void {
+  private async calculateRoute(): Promise<void> {
     if (this.allPoints.length > 1) {
       this.nextIndex = this.currentIndex + 1;
 
       const fromAddress = this.allPoints[this.currentIndex].meta.address;
+      const fromLat = this.allPoints[this.currentIndex].coords.lat;
+      const fromLong = this.allPoints[this.currentIndex].coords.lng;
+
+      // get place id - via reverse geocode
+      const fromPlaceId = await this.map.reverseGeoCode(
+        fromLat,
+        fromLong,
+        'placeId'
+      );
+
+      console.log(fromPlaceId);
 
       const toAddress = this.allPoints[this.nextIndex].meta.address;
+      const toLat = this.allPoints[this.nextIndex].coords.lat;
+      const toLong = this.allPoints[this.nextIndex].coords.lng;
+
+      const toPlaceId = await this.map.reverseGeoCode(toLat, toLong, 'placeId');
 
       this.map
-        .googleDirection(fromAddress, toAddress)
+        .googleDirection(fromPlaceId, toPlaceId)
         .then((response: any) => {
           const directionRenderer = new this.google.maps.DirectionsRenderer({
             map: this.gMap,
